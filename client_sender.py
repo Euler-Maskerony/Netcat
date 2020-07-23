@@ -1,11 +1,14 @@
 import sys
 import socket
+from parser import ip_parser
 
 def sender(target, port, buffer):
 
     client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
     try:
+        if target == 'my-ip':
+            target = ip_parser()
         client.connect((target, port))
         print('Connected %s:%d' % (target, port))
         if len(buffer):
@@ -31,5 +34,5 @@ def sender(target, port, buffer):
             client.send(buffer.encode())
     except Exception as err:
         print(err)
-        print('[*] Exception! Exiting...')
+        print('[*]Exception! Exiting...')
         client.close()
