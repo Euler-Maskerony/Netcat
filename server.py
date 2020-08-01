@@ -14,7 +14,7 @@ def run_command(command):
         else:
             raise RuntimeError
     except:
-        out = "[*]Failed to execute command".encode()
+        out = "[!] Failed to execute command".encode()
     
     return out
 
@@ -41,7 +41,7 @@ class ClientHandler(Thread):
                f.write(file_buffer)
         
         if self.command:
-            print("[*]Client (%s:%d) has opened shell" % (self.addr[0], self.addr[1]))
+            print("[*] Client (%s:%d) has opened shell" % (self.addr[0], self.addr[1]))
             self.client.send("Shell:".encode())
             while True:
                 cmd_buffer = ""
@@ -58,6 +58,7 @@ def port_scaner(target):
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         if not s.connect_ex((target, p)):
             return p
+    print("[!] No ports are available.")
 
 def server_loop(target, port, upload_destination, command):
     try:
@@ -69,14 +70,14 @@ def server_loop(target, port, upload_destination, command):
         if target == "my-ip":
             target = ip_parser()
         server.bind((target, port))
-        print('[*]Binded %s:%d' % (target, port))
+        print('[*] Binded %s:%d' % (target, port))
         server.listen(5)
-        print('[*]Listen %s:%d' % (target, port))
+        print('[*] Listen %s:%d' % (target, port))
         while True:
             client, addr = server.accept()
-            print("[*]Successfuly connected %s:%d" % (addr[0], addr[1]))
+            print("[*] Successfuly connected %s:%d" % (addr[0], addr[1]))
             client_thread = ClientHandler(client, upload_destination, command, addr)
             client_thread.start()
     except KeyboardInterrupt:
-        print("\n[*]Aborting connection...")
+        print("\n[!] Aborting connection...")
         server.close()

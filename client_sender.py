@@ -34,5 +34,5 @@ def sender(target, port, buffer):
             client.send(buffer.encode())
     except Exception as err:
         print(err)
-        print('[*]Exception! Exiting...')
+        print('[!] Exception! Exiting...')
         client.close()
